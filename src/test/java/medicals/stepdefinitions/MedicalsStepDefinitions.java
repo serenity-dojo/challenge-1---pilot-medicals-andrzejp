@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class MedicalsStepDefinitions {
 
+    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d MMMM uuuu");
     private MedicalsService medicalsService;
 
     private Pilot pilot;
@@ -33,8 +34,7 @@ public class MedicalsStepDefinitions {
 
     @ParameterType(".*")
     public LocalDate date(String date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM uuuu");
-        return LocalDate.parse(date, formatter.withResolverStyle(STRICT));
+        return LocalDate.parse(date, dateFormatter.withResolverStyle(STRICT));
     }
 
     @Given("{word} is a {pilotClass} pilot")
@@ -57,7 +57,7 @@ public class MedicalsStepDefinitions {
 
     @Then("his/her medical certificate will expire on {date}")
     public void medical_certificate_will_expire_on(LocalDate date) {
-        assertThat(medicalsService.findDateLimitForNextMedical(pilot))
-                .isEqualTo(date);
+        assertThat(medicalsService.findDateLimitForNextMedical(pilot).format(dateFormatter))
+                .isEqualTo(date.format(dateFormatter));
     }
 }
