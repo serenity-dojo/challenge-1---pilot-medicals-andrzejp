@@ -31,9 +31,9 @@ public class MedicalsStepDefinitions {
         return PilotClass.withLabel(label);
     }
 
-    @ParameterType("\\d{2}/\\d{2}/\\d{4}")
+    @ParameterType(".*")
     public LocalDate date(String date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM uuuu");
         return LocalDate.parse(date, formatter.withResolverStyle(STRICT));
     }
 
