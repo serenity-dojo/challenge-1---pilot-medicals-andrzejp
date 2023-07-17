@@ -27,7 +27,7 @@ public class MedicalsStepDefinitions {
         medicalsService = new MedicalsService();
     }
 
-    @ParameterType("(?:1st|2nd|3rd) class")
+    @ParameterType(".*")
     public PilotClass pilotClass(String label) {
         return PilotClass.withLabel(label);
     }
@@ -57,6 +57,35 @@ public class MedicalsStepDefinitions {
 
     @Then("his/her medical certificate will expire on {date}")
     public void medical_certificate_will_expire_on(LocalDate date) {
+        assertThat(medicalsService.findDateLimitForNextMedical(pilot).format(dateFormatter))
+                .isEqualTo(date.format(dateFormatter));
+    }
+
+    @Given("Peter/Terry is a {pilotClass} pilot born on {date}")
+    public void peter_is_a_class_pilot_born_on(PilotClass pilotClass, LocalDate birthDate) {
+        pilot = Pilot.builder()
+                .pilotClass(pilotClass)
+                .birthDate(birthDate)
+                .build();
+    }
+
+    @When("his last medical was on {date}")
+    public void his_last_medical_was_on_january(LocalDate medicalDate) {
+        medicalsService.recordDateOfMedical(pilot, medicalDate);
+    }
+
+    @When("today is {date}")
+    public void today_is(LocalDate date) {
+        medicalsService.checkLicenseValidity(pilot, date);
+    }
+
+    @Then("his license should now be {pilotClass}")
+    public void his_license_should_now_be(PilotClass pilotClass) {
+        assertThat(pilot.getPilotClass()).isEqualTo(pilotClass);
+    }
+
+    @Then("be valid until {date}")
+    public void be_valid_until(LocalDate date) {
         assertThat(medicalsService.findDateLimitForNextMedical(pilot).format(dateFormatter))
                 .isEqualTo(date.format(dateFormatter));
     }
