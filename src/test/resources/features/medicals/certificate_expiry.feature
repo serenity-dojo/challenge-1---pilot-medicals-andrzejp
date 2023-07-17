@@ -5,7 +5,7 @@ Feature: Medical certificate expiry rules
   So that I exercise the right level of privileges
 
   Rule: A 1st or second class license that expires drops to a lower level and gets a new expiration date
-    Scenario Outline:
+    Scenario Outline: 1st or 2nd class license expires
       Given Peter is a <Class> pilot born on <Birth Date>
       When his last medical was on <Medical Date>
       And today is <Today's Date>
@@ -23,7 +23,7 @@ Feature: Medical certificate expiry rules
         | 2nd class | 1 January 1970 | 1 January 2020 | 1 February 2021 | 3rd class | 31 January 2022     |
 
   Rule: A 3rd class licence that expires cannot be used to fly
-    Scenario Outline:
+    Scenario Outline: 3rd class license expires
       Given Terry is a 3rd class pilot born on <Birth Date>
       When his last medical was on <Medical Date>
       And today is <Today's Date>
